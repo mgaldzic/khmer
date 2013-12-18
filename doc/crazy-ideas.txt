@@ -6,3 +6,5 @@ Crazy ideas
 
    Inspired by a paper that Titus reviewed for PLoS One; not yet published.
 
+2. Scaling diginorm: one idea is to load data until the hash table FP rate
+   max is reached, then ditch the hash table and start over again.
