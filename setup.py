@@ -55,13 +55,14 @@ EXTRA_OBJS.extend(path_join("lib", "bzip2", bn + ".o") for bn in [
 BUILD_DEPENDS = list(EXTRA_OBJS)
 BUILD_DEPENDS.extend(path_join("lib", bn + ".hh") for bn in [
     "khmer", "khmer_config", "kmer_hash", "hashtable", "counting",
-    "hashbits", "labelhash"])
+    "hashbits", "labelhash", "hllcounter"])
 
 SOURCES = ["khmer/_khmermodule.cc"]
 SOURCES.extend(path_join("lib", bn + ".cc") for bn in [
     "khmer_config", "thread_id_map", "trace_logger", "perf_metrics",
     "read_parsers", "kmer_hash", "hashtable", "hashbits", "labelhash",
-    "counting", "subset", "aligner", "scoringmatrix", "node", "kmer"])
+    "counting", "subset", "aligner", "scoringmatrix", "node", "kmer",
+    "hllcounter"])
 
 EXTRA_COMPILE_ARGS = ['-O3']
 

@@ -8,6 +8,7 @@ Contact: khmer-project@idyll.org
 
 from khmer._khmer import _new_counting_hash
 from khmer._khmer import _new_hashbits
+from khmer._khmer import _new_hll_counter
 from khmer._khmer import set_reporting_callback
 from khmer._khmer import _LabelHash
 from khmer._khmer import _Hashbits
@@ -70,6 +71,10 @@ def new_counting_hash(k, starting_size, n_tables=2, n_threads=1):
     primes = get_n_primes_above_x(n_tables, starting_size)
 
     return _new_counting_hash(k, primes, n_threads)
+
+
+def new_hll_counter(bits=8):
+    return _new_hll_counter(bits)
 
 
 def load_hashbits(filename):
