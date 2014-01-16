@@ -173,6 +173,20 @@ def test_label_tag_correctness():
     assert len(labels) == 1
     assert 3L in labels
 
+def test_traverse_from_kmer():
+    K = 20
+    lb = LabelHash(K, 1e6, 4)
+
+    seq = 'ATCGTGCTATCGTAGCTTAAAAAAAAATCGGGTCC'
+    kmer_start = seq[5:K+5]
+    kmer_left = seq[4:K+4]
+    kmer_right = seq[6:K+6]
+
+    tr_left = lb.traverse_from_kmer(kmer_start, 'left')
+    print kmer_start, kmer_left, tr_left
+    assert kmer_left == tr_left[0]
+
+
 #
 # Begin Hashbits tests
 #

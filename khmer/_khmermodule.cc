@@ -4538,6 +4538,51 @@ static PyObject * labelhash_n_labels(PyObject * self, PyObject * args)
   return PyInt_FromLong(labelhash->n_labels());
 }
 
+static PyObject * labelhash_traverse_from_kmer(PyObject * self, PyObject * args) {
+  khmer_KLabelHashObject * me = (khmer_KLabelHashObject *) self;
+  khmer::LabelHash * labelhash = me->labelhash;
+
+  const char * kmer_s = NULL;
+  const char * dir = "r";
+
+  if (!PyArg_ParseTuple(args, "ss", &kmer_s, &dir)) {
+    return NULL;
+  }
+
+  int ksize = labelhash->ksize();
+
+  if (strlen(kmer_s) < ksize) {
+    PyErr_SetString(PyExc_ValueError,
+	    "kmer_s must be less than the k-mer size of the counting hash");
+    return NULL;
+  }
+
+  khmer::HashIntoType kmer, kmer_f, kmer_r;
+  kmer = khmer::_hash(kmer_s, ksize, kmer_f, kmer_r);
+
+  khmer::SeenSet neighbors;
+
+  if (dir[0] == 'l' || dir[0] == 'L') {
+    labelhash->traverse_left(kmer_f, kmer_r, neighbors);
+  } else if (dir[0] == 'r' || dir[0] == 'R') {
+    labelhash->traverse_right(kmer_f, kmer_r, neighbors);
+  }
+
+  PyObject * neighbors_list = PyList_New(neighbors.size());
+  khmer::SeenSet::const_iterator si;
+  unsigned long long i = 0;
+  for (si=neighbors.begin(); si!=neighbors.end(); ++si) {
+    //std::string kmer_s = _revhash(*si, labelhash->ksize());
+    const char * kmer_cstr = khmer::_revhash(*si, ksize).c_str(); 
+    PyObject * kmer = Py_BuildValue("s", kmer_cstr); 
+    PyList_SET_ITEM(neighbors_list, i, kmer);
+    std::cout << kmer_cstr << std::endl;
+    i++;
+  }
+
+  return neighbors_list;
+}
+
 static PyMethodDef khmer_labelhash_methods[] = {
   { "consume_fasta_and_tag_with_labels", labelhash_consume_fasta_and_tag_with_labels, METH_VARARGS, "" },
   { "sweep_label_neighborhood", labelhash_sweep_label_neighborhood, METH_VARARGS, "" },
@@ -4547,7 +4592,7 @@ static PyMethodDef khmer_labelhash_methods[] = {
   {"consume_sequence_and_tag_with_labels", labelhash_consume_sequence_and_tag_with_labels, METH_VARARGS, "" },
   {"n_labels", labelhash_n_labels, METH_VARARGS, ""},
   {"get_label_dict", labelhash_get_label_dict, METH_VARARGS, "" },
- 
+  {"traverse_from_kmer", labelhash_traverse_from_kmer, METH_VARARGS, "" },
   {NULL, NULL, 0, NULL}           /* sentinel */
 };
 

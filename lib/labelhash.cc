@@ -347,3 +347,66 @@ void LabelHash::traverse_labels_and_resolve(const SeenSet& tagged_kmers,
 }
 
 
+void LabelHash::traverse_right(const HashIntoType& kmer_f,
+                               const HashIntoType& kmer_r,
+                               SeenSet& neighbors) {
+    HashIntoType f, r;
+    const unsigned int rc_left_shift = _ksize*2 - 2;
+    //const HashIntoType bitmask = bitmask;
+  
+    f = next_f(kmer_f, 'A');
+    r = next_r(kmer_r, 'A');
+    if (get_count(uniqify_rc(f,r))) {
+      neighbors.insert(uniqify_rc(f,r));
+    }
+
+    f = next_f(kmer_f, 'C');
+    r = next_r(kmer_r, 'C');
+    if (get_count(uniqify_rc(f,r))) {
+      neighbors.insert(uniqify_rc(f,r));
+    }
+
+    f = next_f(kmer_f, 'T');
+    r = next_r(kmer_r, 'T');
+    if (get_count(uniqify_rc(f,r))) {
+      neighbors.insert(uniqify_rc(f,r));
+    }
+
+    f = next_f(kmer_f, 'G');
+    r = next_r(kmer_r, 'G');
+    if (get_count(uniqify_rc(f,r))) {
+      neighbors.insert(uniqify_rc(f,r));
+    }
+}
+
+void LabelHash::traverse_left(const HashIntoType& kmer_f,
+                              const HashIntoType& kmer_r,
+                              SeenSet& neighbors) {
+    HashIntoType f, r;
+    const unsigned int rc_left_shift = _ksize*2 - 2;
+    
+    f = prev_f(kmer_f, 'A');
+    r = prev_r(kmer_r, 'A');
+    if (get_count(uniqify_rc(f,r))) {
+      neighbors.insert(uniqify_rc(f,r));
+    }
+
+    f = prev_f(kmer_f, 'C');
+    r = prev_r(kmer_r, 'C');
+    if (get_count(uniqify_rc(f,r))) {
+      neighbors.insert(uniqify_rc(f,r));
+    }
+
+    f = prev_f(kmer_f, 'T');
+    r = prev_r(kmer_r, 'T');
+    if (get_count(uniqify_rc(f,r))) {
+      neighbors.insert(uniqify_rc(f,r));
+    }
+
+    f = prev_f(kmer_f, 'G');
+    r = prev_r(kmer_r, 'G');
+    if (get_count(uniqify_rc(f,r))) {
+      neighbors.insert(uniqify_rc(f,r));
+    }
+}
+ 

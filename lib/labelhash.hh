@@ -138,6 +138,10 @@ namespace khmer {
         void traverse_labels_and_resolve(const SeenSet& tagged_kmers,
                                          LabelPtrSet& found_labels);
 
+        void traverse_right(const HashIntoType& kmer_f, const HashIntoType& kmer_r, SeenSet& neighbors);
+
+        void traverse_left(const HashIntoType& kmer_f, const HashIntoType& kmer_r, SeenSet& neighbors);
+
     };
 };
 
