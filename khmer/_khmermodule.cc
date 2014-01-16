@@ -4563,8 +4563,10 @@ static PyObject * labelhash_traverse_from_kmer(PyObject * self, PyObject * args)
   khmer::SeenSet neighbors;
 
   if (dir[0] == 'l' || dir[0] == 'L') {
+    std::cout << "traversing left" << std::endl;
     labelhash->traverse_left(kmer_f, kmer_r, neighbors);
   } else if (dir[0] == 'r' || dir[0] == 'R') {
+    std::cout << "traversing right" << std::endl;
     labelhash->traverse_right(kmer_f, kmer_r, neighbors);
   }
 
