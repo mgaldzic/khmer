@@ -68,10 +68,12 @@ def normalize_by_median(input_filename, outfp, ht, args, report_fp=None):
     for n, record in enumerate(screed.open(
         input_filename)):
 
-        hb.consume(record.sequence)
+        passed_filter = False
+
         if get_ratio(record.sequence,K,hb) > 0.5:
             discarded += 1
         else:
+            passed_filter = True
             ht.consume(record.sequence)
             #find kmers with counts > args.cutoff (arg)
             for kmer in kmers(record.sequence,K):
@@ -91,17 +93,17 @@ def normalize_by_median(input_filename, outfp, ht, args, report_fp=None):
 
                 hb.HT_SIZE += random.randint(-50,50)               #added
         # Emit records if any passed
-        #if passed_length and passed_filter:
-        if hasattr(record, 'accuracy'):
-            outfp.write(
-                '@{name}\n{seq}\n'
-                '+\n{acc}\n'.format(name=record.name,
-                                    seq=record.sequence,
-                                    acc=record.accuracy))
-        else:
-            outfp.write(
-                '>{name}\n{seq}\n'.format(name=record.name,
-                                            seq=record.sequence))
+        if passed_filter:
+            if hasattr(record, 'accuracy'):
+                outfp.write(
+                    '@{name}\n{seq}\n'
+                    '+\n{acc}\n'.format(name=record.name,
+                                        seq=record.sequence,
+                                        acc=record.accuracy))
+            else:
+                outfp.write(
+                    '>{name}\n{seq}\n'.format(name=record.name,
+                                                seq=record.sequence))
         
         total += len(record)
     return total, discarded
