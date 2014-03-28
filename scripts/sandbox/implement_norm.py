@@ -64,7 +64,7 @@ def normalize_by_median(input_filename, outfp, ht, args, report_fp=None):
     total = 0
     discarded = 0
 
-    hb = khmer.new_hashbits(ht.ksize(),1,1)
+    hb = khmer.new_hashbits(ht.ksize(), args.min_hashsize * 10, 4)
 
     for n, record in enumerate(screed.open(
         input_filename)):
@@ -94,9 +94,12 @@ def normalize_by_median(input_filename, outfp, ht, args, report_fp=None):
 
 
         if n > 0 and n % args.recycle == 0:
+            print 'checking fp rate for recycle...'
             new_hashsize = args.min_hashsize + random.randint(-50,50)
-            if khmer.calc_expected_collisions(ht) > args.fp_float:
-                ht = khmer.new_counting_hash(K, new_hashsize, N_HT)
+            cur_fp = khmer.calc_expected_collisions(ht) 
+            if cur_fp > args.fp_float:
+                print 'recycling counting hash, fp rate:', cur_fp
+                ht = khmer.new_counting_hash(args.ksize, new_hashsize, args.n_hashes)
 
         # Emit records if any passed
         if passed_filter:
