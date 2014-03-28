@@ -91,7 +91,11 @@ def normalize_by_median(input_filename, outfp, ht, args, report_fp=None):
                     1. - (discarded / float(total))
                 report_fp.flush()
 
+            if n > 0 and n % recycle == 0:
+                if khmer.calc_expected_collisions(ht) > fp_float
+                    ht = khmer.new_counting_hash(K, HT_SIZE, N_HT)
                 hb.HT_SIZE += random.randint(-50,50)               #added
+
         # Emit records if any passed
         if passed_filter:
             if hasattr(record, 'accuracy'):
@@ -108,7 +112,6 @@ def normalize_by_median(input_filename, outfp, ht, args, report_fp=None):
         total += len(record)
     return total, discarded
 #-------------------------------------------------------------------------------
-
 def main():
     parser = build_construct_args()
     parser.add_argument('-C', '--cutoff', type=int, dest='cutoff',
@@ -126,6 +129,10 @@ def main():
                         type=int, help='dump hashtable every d files',
                         default=-1)
     parser.add_argument('input_filenames', nargs='+')
+    parser.add_argument('-re', '--recycle-reads', type = int, \
+                        dest = 'recycle', default = 5000000)
+    parser.add_argument('-fp', '--false_positive', type = float, \
+                        dest = 'fp_float', default = 5000000)
 
     args = parser.parse_args()
 
