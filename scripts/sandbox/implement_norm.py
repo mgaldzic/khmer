@@ -64,7 +64,7 @@ def normalize_by_median(input_filename, outfp, ht, args, report_fp=None):
     total = 0
     discarded = 0
 
-    hb = khmer.new_hashbits(ht.ksize(),1,1)
+    hb = khmer.new_hashbits(ht.ksize(),args.min_hashsize *10,4)
 
     for n, record in enumerate(screed.open(
         input_filename)):
