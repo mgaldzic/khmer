@@ -92,10 +92,11 @@ def normalize_by_median(input_filename, outfp, ht, args, report_fp=None):
                     1. - (discarded / float(total))
                 report_fp.flush()
 
-            if n > 0 and n % args.recycle == 0:
-                args.min_hashsize += random.randint(-50,50)
-                if khmer.calc_expected_collisions(ht) > args.fp_float:
-                    ht = khmer.new_counting_hash(K, HT_SIZE, N_HT)
+
+        if n > 0 and n % args.recycle == 0:
+            new_hashsize = args.min_hashsize + random.randint(-50,50)
+            if khmer.calc_expected_collisions(ht) > args.fp_float:
+                ht = khmer.new_counting_hash(K, new_hashsize, N_HT)
 
         # Emit records if any passed
         if passed_filter:
