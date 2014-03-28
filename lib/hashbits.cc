@@ -1,7 +1,8 @@
 //
 // This file is part of khmer, http://github.com/ged-lab/khmer/, and is
 // Copyright (C) Michigan State University, 2009-2013. It is licensed under
-// the three-clause BSD license; see doc/LICENSE.txt. Contact: ctb@msu.edu
+// the three-clause BSD license; see doc/LICENSE.txt. 
+// Contact: khmer-project@idyll.org
 //
 
 #include <iostream>
@@ -141,6 +142,16 @@ void Hashbits::consume_fasta_overlap(const std::string &filename,
 //block size for curve
     int block_size = total_reads/100;
 
+// reads number <100, block size =1
+    if (block_size == 0) {
+        block_size = 1;
+    }
+// set the remaining as 0
+    for (int n=total_reads; n<100; n++) {
+        curve[0][n] = 0;
+        curve[1][n] = 0;
+    }
+
     total_reads = 0;
     HashIntoType start = 0, stop = 0;
 
@@ -149,7 +160,6 @@ void Hashbits::consume_fasta_overlap(const std::string &filename,
 
 
 
-    string currName = "";
     string currSeq = "";
 
     //
@@ -159,7 +169,6 @@ void Hashbits::consume_fasta_overlap(const std::string &filename,
     while(!parser->is_complete())  {
         read = parser->get_next_read();
         currSeq = read.sequence;
-        currName = read.name;
 
         unsigned int this_n_consumed;
         bool is_valid;
@@ -202,10 +211,9 @@ unsigned int Hashbits::consume_string_overlap(const std::string &s,
     unsigned int n_consumed = 0;
 
     KMerIterator kmers(sp, _ksize);
-    HashIntoType kmer;
 
     while(!kmers.done()) {
-        kmer = kmers.next();
+        HashIntoType kmer = kmers.next();
 
         count_overlap(kmer,ht2);
         n_consumed++;

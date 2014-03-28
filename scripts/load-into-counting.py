@@ -15,14 +15,14 @@ Use '-h' for parameter help.
 import sys
 import threading
 import khmer
-from khmer.counting_args import build_construct_args, report_on_config
+from khmer.khmer_args import build_counting_args, report_on_config
 from khmer.threading_args import add_threading_args
 
 #
 
 
 def main():
-    parser = build_construct_args()
+    parser = build_counting_args()
     add_threading_args(parser)
     parser.add_argument('output_filename')
     parser.add_argument('input_filenames', nargs='+')
@@ -92,7 +92,7 @@ def main():
         print >>sys.stderr, "** ERROR: the counting hash is too small for"
         print >>sys.stderr, "** this data set.  Increase hashsize/num ht."
         print >>sys.stderr, "**"
-        sys.exit(-1)
+        sys.exit(1)
 
     print 'DONE.'
 
