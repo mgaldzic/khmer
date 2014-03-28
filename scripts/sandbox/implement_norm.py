@@ -91,7 +91,11 @@ def normalize_by_median(input_filename, outfp, ht, args, report_fp=None):
                     1. - (discarded / float(total))
                 report_fp.flush()
 
-                hb.HT_SIZE += random.randint(-50,50)               #added
+        if n > 0 and n % 500000 == 0:
+            if ht.calc_expected_collisions() > .6:
+                NEW_HTSIZE = args.minhashize += random.randint(-50,50)
+                ht = khmer.new_counting_hash(args.ksize, NEW_HTSIZE, args.n_hashes)
+
         # Emit records if any passed
         if passed_filter:
             if hasattr(record, 'accuracy'):
