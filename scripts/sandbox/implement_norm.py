@@ -20,6 +20,7 @@ import khmer
 from itertools import izip
 from khmer.counting_args import build_construct_args, DEFAULT_MIN_HASHSIZE
 import argparse
+import random
 
 DEFAULT_DESIRED_COVERAGE = 10
 
@@ -91,10 +92,11 @@ def normalize_by_median(input_filename, outfp, ht, args, report_fp=None):
                     1. - (discarded / float(total))
                 report_fp.flush()
 
-        if n > 0 and n % 500000 == 0:
-            if ht.calc_expected_collisions() > .6:
-                NEW_HTSIZE = args.minhashize += random.randint(-50,50)
-                ht = khmer.new_counting_hash(args.ksize, NEW_HTSIZE, args.n_hashes)
+
+        if n > 0 and n % args.recycle == 0:
+            new_hashsize = args.min_hashsize + random.randint(-50,50)
+            if khmer.calc_expected_collisions(ht) > args.fp_float:
+                ht = khmer.new_counting_hash(K, new_hashsize, N_HT)
 
         # Emit records if any passed
         if passed_filter:
@@ -109,10 +111,9 @@ def normalize_by_median(input_filename, outfp, ht, args, report_fp=None):
                     '>{name}\n{seq}\n'.format(name=record.name,
                                                 seq=record.sequence))
         
-        total += len(record)
+        total += 1
     return total, discarded
 #-------------------------------------------------------------------------------
-
 def main():
     parser = build_construct_args()
     parser.add_argument('-C', '--cutoff', type=int, dest='cutoff',
@@ -130,6 +131,10 @@ def main():
                         type=int, help='dump hashtable every d files',
                         default=-1)
     parser.add_argument('input_filenames', nargs='+')
+    parser.add_argument('--recycle', type = int, \
+                        dest = 'recycle', default = 5000000)
+    parser.add_argument('--false_positive', type = float, \
+                        dest = 'fp_float', default = 0.5)
 
     args = parser.parse_args()
 
