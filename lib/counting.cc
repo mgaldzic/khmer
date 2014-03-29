@@ -1,7 +1,8 @@
 //
 // This file is part of khmer, http://github.com/ged-lab/khmer/, and is
 // Copyright (C) Michigan State University, 2009-2013. It is licensed under
-// the three-clause BSD license; see doc/LICENSE.txt. Contact: ctb@msu.edu
+// the three-clause BSD license; see doc/LICENSE.txt. 
+// Contact: khmer-project@idyll.org
 //
 
 #include "hashtable.hh"
@@ -9,7 +10,7 @@
 #include "hashbits.hh"
 #include "read_parsers.hh"
 
-#include "zlib/zlib.h"
+#include "zlib.h"
 #include <math.h>
 #include <algorithm>
 
