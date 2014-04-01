@@ -1,4 +1,22 @@
-2014-03-31  Titus Brown  <t@Titus-MacBook-Air-2.local>
+2014-04-10  Michael R. Crusoe  <mcrusoe@msu.edu>
+
+    * Makefile: run 'build' command before install; ignore _version.py for
+    coverage purposes.
+    * bink.ipynb: deleted
+    * doc/choosing-hash-sizes.txt -> choosing-table-sizes.txt
+    * setup.py,doc/{conf.py,index.txt}: update lists of authors
+    * doc/development.txt: typo
+    * doc/{galaxy,guide,index,introduction,scripts}.txt: remove some
+    references to implementation details of the k-mer tables
+    * doc/{known-issues,release}.txt: updated
+    * khmer/*.cc,lib/*.{cc,hh}: astyle -A10 formatted
+    * lib/read_parsers.cc: fixed case statement fall through
+    * lib/subset.cc: removed unnecessary NULL check (CID 1054804 & 1195088)
+    * scripts/*.py: additional documentation updates
+    * tests/test-data/test-overlap1.ht,data/MSB2-surrender.fa &
+    data/1m-filtered.fa: removed from repository history, .git is now 36M!
+
+2014-03-31  Titus Brown  <ctb@msu.edu>
 
     * scripts/normalize-by-median.py: Fixed unbound variable bug introduced in
     20a433c2.
@@ -7,14 +25,14 @@
     os.getcwd(); also fixed bug where statvfs would choke on an empty
     dirname resulting from input files being in the cwd.
 
-2014-03-31  Michael R. Crusoe  <mcrusoe@msu.edu
+2014-03-31  Michael R. Crusoe  <mcrusoe@msu.edu>
 
     * versioneer.py,ez_setup.py: updated to version 0.10 and 3.4.1
     respectively.
     * docs/release.txt,khmer/_version.py,MANIFEST.in: update ancillary
     versioneer files
 
-2014-03-31  Titus Brown  <t@Titus-MacBook-Air-2.local>
+2014-03-31  Titus Brown  <ctb@msu.edu>
 
     * scripts/*.py,khmer/khmer_args.py: added 'info' function to khmer_args,
     and added citation information to each script.
